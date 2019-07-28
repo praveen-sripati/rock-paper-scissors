@@ -7,7 +7,8 @@ In this project, I applied Python and object-oriented programming skills to buil
 
 ## Installation
 
-Python can be obtained from the Python Software Foundation website at [python.org](https://python.org). Typically, that involves downloading the appropriate installer for your operating system and running it on your machine.
+Python can be obtained from the Python Software Foundation website at [python.org](https://python.org). Typically, that involves downloading the appropriate installer for your operating system and running it on your machine. 
+Requires python 3 or above.
 
 For macOS using homebrew package manager:
 ```bash
