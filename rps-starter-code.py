@@ -50,10 +50,9 @@ class Game:
     # This function provides information of each round w.r.t winning of player
     def round_info(self, move1, move2, score, win_values):
         self.player_scores[score] += 1
-        print(f"{move1} beats {move2}")
+        print(f"{move1.upper()} beats {move2.upper()}")
         print(f"** PLAYER {win_values[score]} WINS **")
-        print(f"Score: Player One {self.player_scores[0]}, Player Two {self.player_scores[1]}")
-        print("( Type \"quit\" to exit from game.)\n")
+        print(f"Score: Player One {self.player_scores[0]}, Player Two {self.player_scores[1]}\n")
 
     def play_round(self):
         move1 = self.p1.move()
@@ -67,26 +66,41 @@ class Game:
         if beats(move1, move2):
             self.round_info(move1, move2, 0, ["ONE", "TWO"])
         elif beats(move2, move1):
-            self.round_info(move1, move2, 1, ["SOME", "TWO"])
+            self.round_info(move2, move1, 1, ["SOME", "TWO"])
         else:
             print("** TIE **")
             print(f"Score: Player One {self.player_scores[0]}, Player Two {self.player_scores[1]}\n")
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
 
+    def rounds_input(self):
+        user_input = input("Enter number of rounds: ")
+        try:
+            if int(user_input) > 0:
+                return int(user_input)
+            else:
+                print("Enter a positive number!")
+                self.rounds_input()
+        except ValueError:
+            print("Enter a number not a string!")
+            self.rounds_input()
+
     def play_game(self):
         round = 0
         print("\nGame start!")
-        print("-"*16)
-        while True:
+        print("="*13 + "\n")
+        rounds = self.rounds_input()
+        for round in range(rounds):
             round += 1
-            print(f"Round {round}:")
+            print(f"Round {round}: ( Type \"quit\" to exit from game )")
+            print("-"*45)
             quit_game = self.play_round()
 
-            #check whether the player wants to quit or not
+            # Check whether the player wants to quit or not
             if quit_game == "quit":
                 break
-        print("Game over!")
+        print(f"Final Score: Player One {self.player_scores[0]}, Player Two {self.player_scores[1]}\n")
+        print("Game over!\n")
 
 
 if __name__ == '__main__':
