@@ -33,6 +33,33 @@ class HumanPlayer(Player):
         else:
             return self.move()
 
+class ReflectPlayer(Player):
+    def __init__(self):
+        self.my_move = random.choice(moves)
+
+    def learn(self, my_move, their_move):
+        self.my_move = my_move
+        self.their_move = their_move
+
+    def move(self):
+        return self.my_move
+
+class CyclePlayer(Player):
+    def __init__(self):
+        self.my_move = random.choice(moves)
+
+    def learn(self, my_move, their_move):
+        self.my_move = my_move
+        self.their_move = their_move
+
+    def move(self):
+        if self.my_move == "rock":
+            return "paper"
+        elif self.my_move == "paper":
+            return "scissors"
+        elif self.my_move == "scissors":
+            return "rock"
+
 
 def beats(one, two):
     return ((one == 'rock' and two == 'scissors') or
@@ -45,14 +72,14 @@ class Game:
     def __init__(self, p1, p2):
         self.p1 = p1
         self.p2 = p2
-        self.player_scores = [0, 0]
+        self.players_score = [0, 0]
 
     # This function provides information of each round w.r.t winning of player
     def round_info(self, move1, move2, score, win_values):
-        self.player_scores[score] += 1
+        self.players_score[score] += 1
         print(f"{move1.upper()} beats {move2.upper()}")
         print(f"** PLAYER {win_values[score]} WINS **")
-        print(f"Score: Player One {self.player_scores[0]}, Player Two {self.player_scores[1]}\n")
+        print(f"Score: Player One {self.players_score[0]}, Player Two {self.players_score[1]}\n")
 
     def play_round(self):
         move1 = self.p1.move()
@@ -69,7 +96,7 @@ class Game:
             self.round_info(move2, move1, 1, ["SOME", "TWO"])
         else:
             print("** TIE **")
-            print(f"Score: Player One {self.player_scores[0]}, Player Two {self.player_scores[1]}\n")
+            print(f"Score: Player One {self.players_score[0]}, Player Two {self.players_score[1]}\n")
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
 
@@ -92,6 +119,7 @@ class Game:
         rounds = self.rounds_input()
         for round in range(rounds):
             round += 1
+            print("-"*45)
             print(f"Round {round}: ( Type \"quit\" to exit from game )")
             print("-"*45)
             quit_game = self.play_round()
@@ -99,10 +127,19 @@ class Game:
             # Check whether the player wants to quit or not
             if quit_game == "quit":
                 break
-        print(f"Final Score: Player One {self.player_scores[0]}, Player Two {self.player_scores[1]}\n")
-        print("Game over!\n")
+        print("-"*45)
+        print(f"Final Score: Player One {self.players_score[0]}, Player Two {self.players_score[1]}\n")
+        if self.players_score[0] > self.players_score[1]:
+            print(f"Final Winner is PLAYER ONE!! Congratulations!")
+        elif self.players_score[1] > self.players_score[0]:
+            print(f"Final Winner is PLAYER TWO!! Congratulations!")
+        else:
+            print("It's A TIE!!")
+
+        print("Game over!")
+        print("-"*45)
 
 
 if __name__ == '__main__':
-    game = Game(HumanPlayer(), RandomPlayer())
+    game = Game(RandomPlayer(), CyclePlayer())
     game.play_game()
