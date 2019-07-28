@@ -22,13 +22,20 @@ class RandomPlayer(Player):
     def move(self):
         return random.choice(moves)
 
-
+class HumanPlayer(Player):
+    def move(self):
+        self.player_move = input("Rock, paper, scissors? > ")
+        if (self.player_move.lower() == "rock"
+            or self.player_move.lower() == "paper"
+            or self.player_move.lower() == "scissors"):
+            return self.player_move
+        else:
+            return self.move()
 
 def beats(one, two):
     return ((one == 'rock' and two == 'scissors') or
             (one == 'scissors' and two == 'paper') or
             (one == 'paper' and two == 'rock'))
-
 
 
 class Game:
@@ -67,5 +74,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(RandomPlayer(), RandomPlayer())
+    game = Game(HumanPlayer(), RandomPlayer())
     game.play_game()
