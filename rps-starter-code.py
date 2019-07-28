@@ -85,7 +85,7 @@ class Game:
     def __init__(self, p1, p2):
         self.p1 = p1
         self.p2 = p2
-        self.players_score = [0, 0]
+        self.players_score = [0, 0, 0]
 
     def round_info(self, move1, move2, index_score, players):
         '''
@@ -106,7 +106,8 @@ class Game:
         print(f"{move1.upper()} beats {move2.upper()}")
         print(f"** PLAYER {players[index_score]} WINS **")
         print(f"Score: Player One {self.players_score[0]},"
-              f" Player Two {self.players_score[1]}\n")
+              f" Player Two {self.players_score[1]},"
+              f" TIES {self.players_score[2]}\n")
 
     def play_round(self):
         move1 = self.p1.move()
@@ -117,15 +118,17 @@ class Game:
             return move1
 
         # display the information of each round
-        print(f"Player 1: {move1}  Player 2: {move2}")
+        print(f"You played {move1}.\nOppenent played {move2}.")
         if beats(move1, move2):
             self.round_info(move1, move2, 0, ["ONE", "TWO"])
         elif beats(move2, move1):
-            self.round_info(move2, move1, 1, ["SOME", "TWO"])
+            self.round_info(move2, move1, 1, ["ONE", "TWO"])
         else:
+            self.players_score[2] += 1
             print("** TIE **")
             print(f"Score: Player One {self.players_score[0]},"
-                  f" Player Two {self.players_score[1]}\n")
+                  f" Player Two {self.players_score[1]},"
+                  f" TIES {self.players_score[2]}\n")
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
 
@@ -165,7 +168,8 @@ class Game:
 
         # Displays the final result after all the results of each round
         print(f"Final Score: Player One {self.players_score[0]},"
-              f" Player Two {self.players_score[1]}\n")
+              f" Player Two {self.players_score[1]},"
+              f" TIES {self.players_score[2]}\n")
         # check whether the score of player 1 is greater than player 2 score
         if self.players_score[0] > self.players_score[1]:
             print(f"Final Winner is PLAYER ONE!!")
